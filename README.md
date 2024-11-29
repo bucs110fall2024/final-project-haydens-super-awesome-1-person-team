@@ -1,8 +1,8 @@
 
 :warning: Everything between << >> needs to be replaced (remove << >> after replacing)
 
-# << Project Title >>
-## CS110 Final Project  << Semester, Year >>
+# << MALOS WRATH >>
+## CS110 Final Project  << Fall Semester, 2024 >>
 
 ## Team Members
 
@@ -29,12 +29,12 @@ TBD
 ## Program Design
 
 ### Features
-TBD
-1. << Feature 1 >>
-2. << Feature 2 >>
-3. << Feature 3 >>
-4. << Feature 4 >>
-5. << Feature 5 >>
+1. Moveable Icon
+2. Different Bullet Attacks
+3. Health System
+4. Dialogue
+5. Victory Screen
+6. Game Over Screen
 
 ### Classes
 
