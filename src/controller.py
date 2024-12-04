@@ -5,14 +5,11 @@ import pygame_menu.widgets
 import pygame_menu.widgets.selection
 import pygame_menu.widgets.selection.right_arrow
 import pygame_menu.widgets.widget
-import pyganim
 from src.player import Player
 from src.rectangle import Rectangle
 from src.malo import Malo
 from src.message import Message
 from src.gui import Gui
-from src.fruits import Fruits
-import random
 
 
 class Controller:
@@ -26,14 +23,20 @@ class Controller:
     self.state = "STARTMENU"
     self.keys = pygame.key.get_pressed()
     
-    self.player = Player(300, 350)
+    self.clock = pygame.time.Clock()
+    self.fps = self.clock.tick(60)
+    
+    
     self.rectangle = Rectangle()
-    self.malo = Malo(220, 10, 200)
+    self.malo = Malo(220, 10, 200, self.fps)
     self.message = Message()
     self.gui = Gui()
+    self.isRunning = True
+    
+    
+    self.player = Player(300, 350, self.fps)
     
     self.gamestate = 0
-    self.projectiles = []
     
     
     self.menu = self.setupSM()
@@ -61,16 +64,19 @@ class Controller:
     return startMenu
     
   def mainloop(self):
-    while True:
+    while self.isRunning:
       if self.state == "STARTMENU":
         self.menuloop()
       elif self.state == "WRATH":
         self.gameloop()
-        
-      print("Bruh")
+      if self.state == "GAMEOVER":
+        self.gameoverloop()
       
-  def setDifficulty(self, _, value):
+  def setDifficulty(self, name, value):
     self.difficulty = value
+    self.player.difficultyStats(self.difficulty, name)
+    self.malo.difficultyStats(self.difficulty)
+    self.gui.difficultyName(name)
       
       
   
@@ -83,7 +89,6 @@ class Controller:
           self.menu.draw(self.screen)
           
           
-        print("Im still going!")  
         pygame.display.update()
           
       
@@ -96,10 +101,9 @@ class Controller:
       #redraw
       
   def gameloop(self):
-      while self.state == "WRATH":
         
         
-          
+        self.clock.tick(60)
         
         self.screen.fill("#000000")
         
@@ -108,53 +112,46 @@ class Controller:
         
         self.malo.renderMalo(self.screen)
         
+        
         if (self.gamestate == 0) or (self.gamestate % 2 == 0):
           self.message.showMessage(self.gamestate, self.screen, self.rectangle.getMessageRect())
         else:
           if self.rectangle.mode == 0:
             self.rectangle.changeSize(-2)
           self.player.renderPlayer(self.screen)
-          self.player.handlePlayer(pygame.key.get_pressed(), self.rectangle.rect)
+          self.player.handlePlayer(pygame.key.get_pressed(), self.rectangle.rect, self.malo.projectiles)
+          self.malo.handleAttacks(self.screen, self.player)
           
           
-          timer = pygame.time.get_ticks()
-          if timer - self.malo.lastProjSpawn > self.malo.projInterval:
-            self.malo.lastProjSpawn = timer
-            print("FIre!")
-            for i in range(5):
-              self.projectiles.append(Fruits(108 + (108 * i), 100, random.randint(0, 4)))
-            print(f"Projectile spawned! Total projectiles: {len(self.projectiles)}")
           
-          for i in self.projectiles:
-            i.fruitRender(self.screen, self.player.x, self.player.y)
-            if i.y > 600:
-              self.projectiles.remove(i)
           
           
         
         self.rectangle.renderRectangle(self.screen)
-        #print("HI")
         
-        self.gui.renderHealth(self.screen, self.player.health)
+        self.gui.renderGUI(self.screen, self.player.health, self.malo.round, self.player.myHighScore, self.player.currentScore)
         
         
         
         for events in pygame.event.get():
           if events.type == pygame.QUIT:
-            pygame.quit()
+            self.isRunning = False
           
           if events.type == pygame.KEYDOWN:
             if events.key == pygame.K_RETURN and self.gamestate % 2 == 0:
               self.gamestate = self.message.handleMessageSeq(self.gamestate)
-            
             if events.key == pygame.K_ESCAPE:
-              self.state = "STARTMENU"
+              self.player.health = 0
+              
+        if self.player.health <= 0:
+          self.player.setHighscoreData()
+          self.state = 'GAMEOVER'
+            
               
         
         
         
-        
-        #print("Now im running!")
+      
         pygame.display.update()
       #event loop
 
@@ -163,7 +160,22 @@ class Controller:
       #redraw
     
   def gameoverloop(self):
-      pass
+    
+    self.clock.tick(60)
+    self.screen.fill("#000000")
+    self.malo.renderMalo(self.screen)
+    
+    
+    self.gui.renderGameOver(self.screen, self.player.currentScore, self.player.myHighScore)
+    
+    for events in pygame.event.get():
+        if events.type == pygame.QUIT:
+          self.isRunning = False
+        if events.type == pygame.KEYDOWN:
+            if events.key == pygame.K_RETURN:
+              self.__init__()
+            
+    pygame.display.update()
       #event loop
 
       #update data
@@ -171,5 +183,4 @@ class Controller:
       #redraw
       
   def start_wrath(self):
-    print("I got ran!")
     self.state = "WRATH"

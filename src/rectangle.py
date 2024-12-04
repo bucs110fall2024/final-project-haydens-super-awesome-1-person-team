@@ -17,7 +17,6 @@ class Rectangle():
         else:
             self.mode = 1
             self.timer = 5
-            print("Done!")
         
     
     def getMessageRect(self):
