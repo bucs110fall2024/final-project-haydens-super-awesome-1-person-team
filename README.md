@@ -13,6 +13,8 @@ Hayden Harrell
 
 A UNDERTALE-themed game where you have to survive Malo's attacks and try to reach a high score! Malo is a proboscis monkey who isn't too fond of humans, show your worth and see how long you can fend against him and his silliness!
 
+Controls are WASD or Arrow Keys to move, Enter to progress the introduction, Escape to end the game.
+
 ***    
 
 ## GUI Design

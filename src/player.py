@@ -1,9 +1,15 @@
 import pygame
 import json
-from src.rectangle import Rectangle
 
 class Player():
     def __init__(self, xPos, yPos, clock):
+        """
+        Initializes the player object
+        args:
+            - xPos : int - starting x coordinate
+            - yPos : int - starting y coordinate
+            - clock : float - game's clock speed (used for some fps independent logic calculation)
+        """
         self.playerState = 0
         self.speed = 0.35
         self.x = xPos
@@ -14,7 +20,7 @@ class Player():
         self.collisionGrid = [True, True, True, True]
         
         self.deltaTime = clock
-        self.rect = self.playerImage.get_rect(center = (self.x, self.y))
+        self.rect = self.playerImage.get_rect(topleft = (self.x, self.y))
         self.invincTimer = 0
         
         self.health = 100
@@ -28,12 +34,23 @@ class Player():
         self.getHighscoreData()
         
     def getHighscoreData(self, difficulty='easy'):
+        """
+        Gets the highscore data from a JSON file
+        args:
+            - difficulty : string - the name of the difficulty, used as a key
+        return: int - the high score with respect to the current difficulty from the JSON
+        """
         file = open(self.HIGHSCOREPATH, 'r')
         highscore = json.load(file)
         
         return highscore.get(difficulty)
     
     def setHighscoreData(self):
+        """
+        Sets the highscore data from a JSON file
+        args: none
+        return: none
+        """
         scores = {}
         file = open(self.HIGHSCOREPATH, 'r')
         scores = json.load(file)
@@ -48,10 +65,17 @@ class Player():
         
         
     def isColliding(self, rect, projectiles):
+        """
+        determines if the player is colliding with projectiles or the game's rectangle object
+        args:
+            - rect : pygame Rectangle - the rectangle that encapsulates the player
+            - projectiles : list (Projectiles) - the projectile list that contains all current projectiles
+        return: list (int) - the collision grid based on all conditions for possible collision
+        """
         collision = []
         if self.invincTimer == 0:
             for projectile in projectiles:
-                if projectile.rect.contains(self.rect) and self.invincTimer == 0:
+                if projectile.hitbox.colliderect(self.rect) and self.invincTimer == 0:
                     self.invincTimer = self.invincMax
                     self.health -= self.damageMult
                     break
@@ -81,6 +105,13 @@ class Player():
         
         
     def handlePlayer(self, keys, rect, projectiles):
+        """
+        determines if the player is colliding with projectiles or the game's rectangle object
+        args:
+            - rect : pygame Rectangle - the rectangle that encapsulates the player
+            - projectiles : list (Projectiles) - the projectile list that contains all current projectiles
+        return: list (int) - the collision grid based on all conditions for possible collision
+        """                                                                                                                                                                                                         
         self.collisionGrid = self.isColliding(rect, projectiles)
         if self.collisionGrid[2]:
             if keys[pygame.K_w] or keys[pygame.K_UP]:
@@ -96,20 +127,43 @@ class Player():
                 self.movePlayer('x', -1)
     
     def movePlayer(self, axis, sign):
+        """
+        moves the player
+        args:
+            - axis : string - the the axis that the player should be moved
+            - sign: int - the direction that the player should be moved
+        return: list (int) - the collision grid based on all conditions for possible collision
+        """  
         if axis == 'y':
             self.y += self.speed * self.deltaTime * sign
         else:
             self.x += self.speed * self.deltaTime * sign
-        self.rect = self.playerImage.get_rect(topleft = (self.x, self.y))
+        self.rect = self.playerImage.get_rect(center = self.playerImage.get_rect(topleft = (self.x, self.y)).center).scale_by(0.5)
     
     
     def renderPlayer(self, screen):
+        """
+        draws the player
+        args:
+            - axis : string - the the axis that the player should be moved
+            - sign: int - the direction that the player should be moved
+        return: list (int) - the collision grid based on all conditions for possible collision
+        """  
         if self.invincTimer == 0:
             screen.blit(self.playerImage, [self.x, self.y])
         else:    
             screen.blit(self.playerImage, [self.x, self.y])
+            
+        #pygame.draw.rect(screen, pygame.Color('#ffffff'), self.rect)
         
     def difficultyStats(self, difficulty, name):
+        """
+        handles difficulty stats that need to be updated when the difficulty is changed
+        args:
+            - difficulty : int - the difficulty (1-2-3) for (Easy-Medium-Hard)
+            - name: tuple - tuple containing the difficulty name
+        return: list (int) - the collision grid based on all conditions for possible collision
+        """  
         if difficulty == 1:
             self.invincMax = self.defInvincMax
             self.damageMult = self.defDamageMult

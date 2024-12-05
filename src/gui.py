@@ -1,9 +1,13 @@
 import pygame
-import json
-from src.player import Player
+
 
 class Gui():
     def __init__(self):
+        """
+        Initializes the GUI object
+        args:
+            none
+        """
         self.healthDim = [270, 430, 100, 40]
         self.healthB = pygame.Rect(self.healthDim)
         self.healthF = pygame.Rect(self.healthDim)
@@ -33,12 +37,15 @@ class Gui():
         self.bestScore = self.font3.render("BEST:", True, self.white)
         self.currentScore = self.font3.render("CURRENT:", True, self.white)
         
-        
-        
-        
         self.difficulty = 'EASY'
         
     def difficultyName(self, difficulty):
+        """
+        Stores the name of whatever the difficulty mode is on for the game for the game over message.
+        args:
+            - difficulty : tuple - passed by the start menu function whenever the difficulty mode is changed. 
+        returns: none
+        """
         
         self.difficulty = difficulty[0][0].upper()
         combinedStr = "You tried on " + self.difficulty + " difficulty!"   
@@ -47,6 +54,17 @@ class Gui():
 
     
     def renderGUI(self, screen, health, round, bestScore, currentScore):
+        """
+        Renders the GUI and any relevant information.
+        args:
+            - screen : pygame Surface object - the whole game screen
+            - health : int - the player's current health
+            - round : int - Malo's current attack round
+            - bestScore : int - the player's current high score with respect to the game difficulty
+            - currentScore : int - the player's current score
+        returns: none     
+        """
+        
         self.current = self.font.render(str(health), True, self.white)
         self.currentRound = self.font3.render(f"ROUND: {round}", True, self.white)
         if currentScore > bestScore:
@@ -67,6 +85,15 @@ class Gui():
         
         
     def renderGameOver(self, screen, currentScore, bestScore):
+        """
+        Renders the game over screen.
+        args:
+            - screen : pygame Surface object - the whole game screen
+            - bestScore : int - the player's current high score with respect to the game difficulty
+            - currentScore : int - the player's current score
+        returns: none     
+        """
+        
         self.gameoverMsg2 = self.font.render(f"Your score was: {currentScore}", True, self.white)
         if currentScore > bestScore:
             self.gameoverMsg3 = self.font.render(f"Your high score is: {currentScore}", True, self.white)
