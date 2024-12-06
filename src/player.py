@@ -25,7 +25,7 @@ class Player():
         
         self.health = 100
         self.myHighScore = self.getHighscoreData()
-        self.currentScore = 30
+        self.currentScore = 0
 
         self.invincMax = 200
         self.defInvincMax = 200
