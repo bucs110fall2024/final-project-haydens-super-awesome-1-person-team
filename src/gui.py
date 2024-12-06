@@ -26,11 +26,13 @@ class Gui():
         self.gameoverMsg1 = self.font.render("You tried on EASY difficulty!", True, self.white)
         self.gameoverMsg2 = self.font.render("Your score was: ", True, self.white)
         self.gameoverMsg3 = self.font.render("Your high score is: ", True, self.white)
+        self.gameoverMsg4 = self.font.render("Press ENTER to restart", True, self.white)
         
         self.gameoverRect = self.gameover.get_rect(center = (640/2, 480/2))
         self.gameoverMsg1Rect = self.gameoverMsg1.get_rect(center = (640/2, 300))
         self.gameoverMsg2Rect = self.gameoverMsg2.get_rect(center = (640/2, 340))
         self.gameoverMsg3Rect = self.gameoverMsg3.get_rect(center = (640/2, 380))
+        self.gameoverMsg4Rect = self.gameoverMsg4.get_rect(center = (640/2, 420))
         
         
         self.currentRound = self.font3.render("ROUND:", True, self.white)
@@ -51,6 +53,7 @@ class Gui():
         combinedStr = "You tried on " + self.difficulty + " difficulty!"   
         self.gameoverMsg1 = self.font.render(combinedStr, True, self.white)
         self.gameoverMsg1Rect = self.gameoverMsg1.get_rect(center = (640/2, 300))
+        
 
     
     def renderGUI(self, screen, health, round, bestScore, currentScore):
@@ -109,3 +112,4 @@ class Gui():
         screen.blit(self.gameoverMsg1, self.gameoverMsg1Rect)
         screen.blit(self.gameoverMsg2, self.gameoverMsg2Rect)
         screen.blit(self.gameoverMsg3, self.gameoverMsg3Rect)
+        screen.blit(self.gameoverMsg4, self.gameoverMsg4Rect)

@@ -47,6 +47,14 @@ Controls are WASD or Arrow Keys to move, Enter to progress the introduction, Esc
 - PROJECTILES - Holds a lot of information for the projectiles and has a lot of unique manipulatable properties that allow for the projectiles to hold different functions for different variants of the projectile.
 - RECTANGLE - Simply the rectangle that encapsulates the player as well as the introductory message box.
 
+### External Libraries
+pygame-menu - installed using pip : https://pygame-menu.readthedocs.io/en/latest/
+
+### Credit
+Font - https://fontstruct.com/fontstructions/show/2163802/fight-me-3
+
+All other assets such as sprites made by me
+
 ## ATP
 ### Test Case 1: Start Menu Functionality
 #### Description: Verify that the user can interact with both menu buttons.
