@@ -118,7 +118,6 @@ class Malo():
                 self.projectiles.append(Projectiles((spacing * self.projectilesAdded), 420, 5, self.deltaTime, 0, 2))
             else:
                 self.projectiles.append(Projectiles((spacing * self.projectilesAdded), -50, 5, self.deltaTime, 0, 1))
-                print("hello")
             if self.backwards == False:
                 self.projectilesAdded += 1
             if self.projectilesAdded == self.projectileMult + 1 or self.backwards == True:

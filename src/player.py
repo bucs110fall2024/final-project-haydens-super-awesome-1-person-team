@@ -25,13 +25,15 @@ class Player():
         
         self.health = 100
         self.myHighScore = self.getHighscoreData()
-        self.currentScore = 0
+        self.currentScore = 30
 
         self.invincMax = 200
         self.defInvincMax = 200
         self.damageMult = 5
         self.defDamageMult = 5
         self.getHighscoreData()
+        
+        self.myDifficulty = 'easy'
         
     def getHighscoreData(self, difficulty='easy'):
         """

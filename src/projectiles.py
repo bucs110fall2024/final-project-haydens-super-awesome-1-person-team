@@ -59,6 +59,7 @@ class Projectiles():
         self.state = 0
         self.PlayerVec = [0, 0]
         
+        
     def spin(self, speed):
         """
         spin the projectile
